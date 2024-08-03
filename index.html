@@ -109,8 +109,8 @@
           </div>
         </section>
 
-             <section
-          class="w-full lg:w-[50%] p-6 flex flex-col items-center justify-center hidden "
+        <section
+          class="w-full lg:w-[50%] p-6 flex flex-col items-center justify-center hidden"
           id="loaderBox"
         >
           <img
@@ -118,7 +118,9 @@
             alt="Loading animation"
             class="mb-4"
           />
-          <p class="text-md  text-[#e7a82e]" id="currentProcess">Process has started...</p>
+          <p class="text-md text-[#e7a82e]" id="currentProcess">
+            Process has started...
+          </p>
         </section>
 
         <section class="w-full p-4 hidden" id="resultBox">
@@ -265,7 +267,8 @@
       const RESULT_BOX = document.getElementById("resultBox");
       const LOADER_BOX = document.getElementById("loaderBox");
       const SEARCH_BOX = document.getElementById("searchBox");
-const CURRENT_PROCESS = document.getElementById("currentProcess");
+      const CURRENT_PROCESS = document.getElementById("currentProcess");
+      let bookCounter = 0;
       const toggleVisibility = (element, show) => {
         if (!element) {
           console.error("Element not found");
@@ -386,7 +389,7 @@ const CURRENT_PROCESS = document.getElementById("currentProcess");
         let selectedType2 = doc.querySelector(
           ".a-button-selected .a-button-inner .a-button-text .slot-title .audible_mm_title span span:nth-of-type(2)"
         );
-        console.log(selectedType2);
+        // console.log(selectedType2);
         if (selectedType2) {
           let bookType = selectedType2.textContent.trim();
           return bookType;
@@ -399,6 +402,22 @@ const CURRENT_PROCESS = document.getElementById("currentProcess");
       };
 
       const getBookPrice = (doc) => {
+        const type2 = doc.querySelector(".a-icon-kindle-unlimited");
+        if (type2) {
+          let bookPrice = doc.querySelector(".a-color-price").innerText;
+          let priceToPay = doc.querySelector(".priceToPay .a-offscreen");
+          if (priceToPay) {
+            console.log(priceToPay);
+            console.log(priceToPay.innerText);
+            bookPrice = priceToPay.innerText.replace(",", ".").replace("€", "");
+          } else {
+            bookPrice = 0;
+            return bookPrice;
+          }
+
+          // bookPrice = bookPrice.replace(",", ".").replace("€", "").trim();
+          return bookPrice;
+        }
         let bookPrice = doc.querySelector(".a-color-price").innerText;
         bookPrice = bookPrice.replace(",", ".").replace("€", "").trim();
         return bookPrice;
@@ -439,9 +458,10 @@ const CURRENT_PROCESS = document.getElementById("currentProcess");
       };
 
       const fetchBookDetails = async (bookId) => {
-        CURRENT_PROCESS.textContent="";
+        bookCounter++;
+        CURRENT_PROCESS.textContent = "";
         const url = `https://makis.world/amazon/dp/${bookId}`;
-        CURRENT_PROCESS.innerHTML = `Fetching book details for book ID: <b>${bookId}</b>`;
+        CURRENT_PROCESS.innerHTML = `Fetching book details for book type <b>${bookCounter}</b>`;
         console.log("Fetching book details for book ID:", bookId);
         const targetPageCode = await fetchPage(url);
         if (!targetPageCode) return null;
@@ -450,6 +470,9 @@ const CURRENT_PROCESS = document.getElementById("currentProcess");
         const doc = parser.parseFromString(targetPageCode, "text/html");
 
         const bookType = getSelectedType(doc);
+        if (bookType === "Hörbuch") {
+          return;
+        }
         let bookPrice = getBookPrice(doc);
         bookPrice = parseFloat(bookPrice); // Convert bookPrice to a number
         const sellerLevel = getSellerLevel(targetPageCode);
@@ -470,7 +493,8 @@ const CURRENT_PROCESS = document.getElementById("currentProcess");
           dailyRevenue = Math.round(bookPrice * sellingAmountPerDay);
           monthlyRevenue = Math.round(bookPrice * sellingAmountPerMonth);
         }
-        CURRENT_PROCESS.textContent="Getting other IDs of remaining book types ..";
+        CURRENT_PROCESS.textContent =
+          "Counting the number of book types available...";
         return {
           bookId,
           bookType,
@@ -484,19 +508,20 @@ const CURRENT_PROCESS = document.getElementById("currentProcess");
       };
 
       const calculateDetails = async () => {
+        bookCounter = 0;
         TBODY_REV.innerHTML = "";
         TBODY_SALE.innerHTML = "";
-        disableButton();
-        hideResultBox();
-        hideSearchBox();
-        showLoader();
         WARNING_TEXT.textContent = "";
         const isbn = ISBN_INPUT.value.trim();
         if (isbn.length !== 10) {
           WARNING_TEXT.textContent = "ISBN must be 10 digits.";
-          enableButton();
+
           return;
         }
+        disableButton();
+        hideResultBox();
+        hideSearchBox();
+        showLoader();
 
         const firstBookDetails = await fetchBookDetails(isbn);
         if (!firstBookDetails) {
@@ -505,7 +530,7 @@ const CURRENT_PROCESS = document.getElementById("currentProcess");
           enableButton();
           return;
         }
-
+        console.log(firstBookDetails);
         const url = `https://makis.world/amazon/dp/${isbn}`;
         const targetPageCode = await fetchPage(url);
         const parser = new DOMParser();
@@ -532,6 +557,7 @@ const CURRENT_PROCESS = document.getElementById("currentProcess");
           const bookDetails = await fetchBookDetails(
             remainingBookIds[remainingBookDetailsLength]
           );
+          console.log(bookDetails);
           if (bookDetails) {
             remainingBookDetails.push(bookDetails);
             if (
@@ -552,64 +578,64 @@ const CURRENT_PROCESS = document.getElementById("currentProcess");
         while (allBookLength > 0) {
           allBookLength--; // Decrement before accessing the array elements
           let rowSale = `
-    <tr class="border-gray-200">
-      <td class="px-4 py-3 text-[1rem] font-medium">${allBooksData[allBookLength].bookType}</td>
-   
-      <td class="px-4 py-3 text-[1rem] text-center">
-        <span class="revenue-kindle-monthly">${allBooksData[allBookLength].sellingAmountPerDay}</span>
-      </td>
-      <td class="px-4 py-3 text-[1rem] text-center">
-        <span class="revenue-kindle-monthly">${allBooksData[allBookLength].sellingAmountPerMonth}</span>
-      </td>
-    </tr>
-    
-  `;
+        <tr class="border-gray-200">
+          <td class="px-4 py-3 text-[1rem] font-medium">${allBooksData[allBookLength].bookType}</td>
+
+          <td class="px-4 py-3 text-[1rem] text-center">
+            <span class="revenue-kindle-monthly">${allBooksData[allBookLength].sellingAmountPerDay}</span>
+          </td>
+          <td class="px-4 py-3 text-[1rem] text-center">
+            <span class="revenue-kindle-monthly">${allBooksData[allBookLength].sellingAmountPerMonth}</span>
+          </td>
+        </tr>
+
+      `;
           TBODY_SALE.innerHTML += rowSale;
           let rowRev = `
-    <tr class="border-gray-200">
-      <td class="px-4 py-3 text-[1rem] font-medium">${allBooksData[allBookLength].bookType}</td>
-  
-      <td class="px-4 py-3 text-[1rem] text-center">
-        <span class="revenue-kindle-monthly">${allBooksData[allBookLength].dailyRevenue}</span>€
-      </td>
-      <td class="px-4 py-3 text-[1rem] text-center">
-        <span class="revenue-kindle-monthly">${allBooksData[allBookLength].monthlyRevenue}</span>€
-      </td>
+        <tr class="border-gray-200">
+          <td class="px-4 py-3 text-[1rem] font-medium">${allBooksData[allBookLength].bookType}</td>
 
-  `;
+          <td class="px-4 py-3 text-[1rem] text-center">
+            <span class="revenue-kindle-monthly">${allBooksData[allBookLength].dailyRevenue}</span>€
+          </td>
+          <td class="px-4 py-3 text-[1rem] text-center">
+            <span class="revenue-kindle-monthly">${allBooksData[allBookLength].monthlyRevenue}</span>€
+          </td>
+
+      `;
           TBODY_REV.innerHTML += rowRev;
         }
         TBODY_SALE.innerHTML += `
-    </tr>
-           <tr class="border-gray-200">
-      <td class="px-4 py-3 text-[1rem] font-semibold">Total</td>
-   
-      <td class="px-4 py-3 text-[1rem] text-center">
-        <span class="revenue-kindle-monthly font-semibold">${totalDailySales}</span>
-      </td>
-      <td class="px-4 py-3 text-[1rem] text-center">
-        <span class="revenue-kindle-monthly font-semibold">${totalMonthlySales}</span>
-      </td>
-    </tr>
-  `;
-        TBODY_REV.innerHTML += `
-    </tr>
-           <tr class="border-gray-200">
-      <td class="px-4 py-3 text-[1rem] font-semibold">Total</td>
-   
-      <td class="px-4 py-3 text-[1rem] text-center">
-        <span class="revenue-kindle-monthly font-semibold">${totalDailyRevenue}</span>
-      </td>
-      <td class="px-4 py-3 text-[1rem] text-center">
-        <span class="revenue-kindle-monthly font-semibold">${totalMonthlyRevenue}</span>
-      </td>
-    </tr>
-  `;
+        </tr>
+               <tr class="border-gray-200">
+          <td class="px-4 py-3 text-[1rem] font-semibold">Total</td>
 
-        console.log("Total Daily Sales:", totalDailySales);
-        console.log("Total Monthly Sales:", totalMonthlySales);
-        console.log("Total Daily Revenue:", totalDailyRevenue);
-        console.log("Total Monthly Revenue:", totalMonthlyRevenue);
+          <td class="px-4 py-3 text-[1rem] text-center">
+            <span class="revenue-kindle-monthly font-semibold">${totalDailySales}</span>
+          </td>
+          <td class="px-4 py-3 text-[1rem] text-center">
+            <span class="revenue-kindle-monthly font-semibold">${totalMonthlySales}</span>
+          </td>
+        </tr>
+      `;
+        TBODY_REV.innerHTML += `
+        </tr>
+               <tr class="border-gray-200">
+          <td class="px-4 py-3 text-[1rem] font-semibold">Total</td>
+
+          <td class="px-4 py-3 text-[1rem] text-center">
+            <span class="revenue-kindle-monthly font-semibold">${totalDailyRevenue}</span>€
+          </td>
+          <td class="px-4 py-3 text-[1rem] text-center">
+            <span class="revenue-kindle-monthly font-semibold">${totalMonthlyRevenue}</span>€
+          </td>
+        </tr>
+      `;
+
+        // console.log("Total Daily Sales:", totalDailySales);
+        // console.log("Total Monthly Sales:", totalMonthlySales);
+        // console.log("Total Daily Revenue:", totalDailyRevenue);
+        // console.log("Total Monthly Revenue:", totalMonthlyRevenue);
 
         enableButton();
         hideLoader();
@@ -620,3 +646,20 @@ const CURRENT_PROCESS = document.getElementById("currentProcess");
     </script>
   </body>
 </html>
+
+<!-- //3951996501 -->
+<!-- const getBookPrice = (doc) => {
+  let bookPrice = doc.querySelector(".a-color-price").innerText;
+  let priceToPay = doc.querySelector(".priceToPay .a-offscreen");
+  if (priceToPay) {
+    console.log(priceToPay);
+    console.log(priceToPay.innerText);
+    bookPrice = priceToPay.innerText.replace(",", ".").replace("€", "");
+  } else {
+    bookPrice = 0;
+    return bookPrice;
+  }
+
+  // bookPrice = bookPrice.replace(",", ".").replace("€", "").trim();
+  return bookPrice;
+}; -->
