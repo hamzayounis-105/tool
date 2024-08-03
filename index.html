@@ -109,8 +109,16 @@
           </div>
         </section>
 
-        <section class="w-full lg:w-[30%] p-4 flex justify-center hidden" id="loaderBox">
-          <img src="Animation - 1722624059186.gif" alt="Loading..." />
+             <section
+          class="w-full lg:w-[50%] p-6 flex flex-col items-center justify-center hidden "
+          id="loaderBox"
+        >
+          <img
+            src="Animation - 1722624059186.gif"
+            alt="Loading animation"
+            class="mb-4"
+          />
+          <p class="text-md  text-[#e7a82e]" id="currentProcess">Process has started...</p>
         </section>
 
         <section class="w-full p-4 hidden" id="resultBox">
@@ -257,7 +265,7 @@
       const RESULT_BOX = document.getElementById("resultBox");
       const LOADER_BOX = document.getElementById("loaderBox");
       const SEARCH_BOX = document.getElementById("searchBox");
-
+const CURRENT_PROCESS = document.getElementById("currentProcess");
       const toggleVisibility = (element, show) => {
         if (!element) {
           console.error("Element not found");
@@ -375,6 +383,14 @@
       };
 
       const getSelectedType = (doc) => {
+        let selectedType2 = doc.querySelector(
+          ".a-button-selected .a-button-inner .a-button-text .slot-title .audible_mm_title span span:nth-of-type(2)"
+        );
+        console.log(selectedType2);
+        if (selectedType2) {
+          let bookType = selectedType2.textContent.trim();
+          return bookType;
+        }
         let selectedType = doc.querySelector(
           ".a-button-selected .a-button-inner .a-button-text .slot-title"
         );
@@ -391,14 +407,20 @@
         let rankMatch = targetPageCode.match(
           /Amazon Bestseller-Rang: <\/span> Nr\. ([\d.,]+) /
         );
-        // console.log(rankMatch);
-        // let rankMatch = doc.querySelector("span:contains('Amazon Bestseller-Rang')");
+
         if (rankMatch) {
           return rankMatch[1].replace(".", "");
+        } else {
+          rankMatch = targetPageCode.match(
+            /<span>Nr\. ([\d.,]+) in Audible Hörbücher &amp; Originals \(<a href="\/gp\/bestsellers\/audible\/ref=pd_zg_ts_audible">Siehe Top 100 in Audible Hörbücher &amp; Originals<\/a>\)<\/span>/
+          );
+          if (rankMatch) {
+            return rankMatch[1].replace(".", "");
+          }
         }
+
         return null;
       };
-
       const fetchPage = async (url) => {
         try {
           const response = await axios.get(url);
@@ -406,6 +428,10 @@
             throw new Error("Network response was not ok.");
           return response.data;
         } catch (error) {
+          enableButton();
+          hideLoader();
+
+          showSearchBox();
           console.error("Error fetching the page:", error);
           WARNING_TEXT.textContent =
             "An error occurred while fetching the page.";
@@ -413,7 +439,9 @@
       };
 
       const fetchBookDetails = async (bookId) => {
+        CURRENT_PROCESS.textContent="";
         const url = `https://makis.world/amazon/dp/${bookId}`;
+        CURRENT_PROCESS.innerHTML = `Fetching book details for book ID: <b>${bookId}</b>`;
         console.log("Fetching book details for book ID:", bookId);
         const targetPageCode = await fetchPage(url);
         if (!targetPageCode) return null;
@@ -442,7 +470,7 @@
           dailyRevenue = Math.round(bookPrice * sellingAmountPerDay);
           monthlyRevenue = Math.round(bookPrice * sellingAmountPerMonth);
         }
-
+        CURRENT_PROCESS.textContent="Getting next book type ID ..";
         return {
           bookId,
           bookType,
@@ -587,6 +615,7 @@
         hideLoader();
         showResultBox();
         showSearchBox();
+        CURRENT_PROCESS.textContent = "Process has started...";
       };
     </script>
   </body>
