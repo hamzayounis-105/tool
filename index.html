@@ -85,12 +85,12 @@
     </div>
 
     <!-- Section: ISBN Input and Book Image -->
-    <div class="container mx-auto p-6 lg:p-12 w-screen">
-      <div class="flex w-full flex-col items-center justify-center -mx-4">
+    <div class="container flex justify-center items-center md:p-6 !py-0 my-0  mx-auto p-2 lg:p-12 w-screen pt-0 mt-0">
+      <div class="flex w-full flex-col items-center justify-center -mx-4 mb-0">
         <!-- ISBN Input and Book Image -->
-        <section class="w-full lg:w-[30%] p-4" id="searchBox">
+        <section class="w-full lg:w-[30%] p-4 pt-0" id="searchBox">
           <div class="bg-white rounded-lg p-6 h-full shadow-md">
-            <h2 class="text-xl font-semibold mb-4">Enter ISBN</h2>
+            <h2 class="text-xl font-semibold mb-4 ">Enter ISBN</h2>
             <input
               type="text"
               id="isbn_input"
@@ -109,77 +109,61 @@
           </div>
         </section>
 
-        <section
-          class="w-full lg:w-[50%] p-6 flex flex-col items-center justify-center hidden"
-          id="loaderBox"
-        >
-          <img
-            src="Animation - 1722624059186.gif"
-            alt="Loading animation"
-            class="mb-4"
-          />
-          <p class="text-md text-[#e7a82e]" id="currentProcess">
-            Process has started...
-          </p>
-        </section>
+     <div class="w-full">
+      <section
+      class="w-full lg:w-[50%] p-6 !py-0 flex flex-col items-center justify-center hidden"
+      id="loaderBox"
+    >
+      <img
+        src="Animation - 1722624059186.gif"
+        alt="Loading animation"
+        class="mb-4"
+      />
+      <p class="text-md text-[#e7a82e]" id="currentProcess">
+        Process has started...
+      </p>
+    </section>
 
-        <section class="w-full p-4 hidden" id="resultBox">
-          <div
-            class="flex flex-col lg:flex-row gap-5 justify-center items-stretch p-6 h-full"
-          >
-            <div
-              class="bg-gray-50 flex flex-col justify-center rounded-lg w-full lg:w-1/2 p-4 shadow-md"
-            >
-              <h2 class="text-xl font-semibold mb-4">Estimated Sales</h2>
-              <table class="w-full table-auto">
-                <thead>
-                  <tr class="border-gray-200">
-                    <th
-                      class="px-4 py-3 text-[1rem] font-medium text-start font-semibold"
-                    >
-                      Book Type
-                    </th>
-                    <th class="px-4 py-3 text-[1rem] font-medium font-semibold">
-                      Daily Sales
-                    </th>
-                    <th class="px-4 py-3 text-[1rem] font-medium font-semibold">
-                      Monthly Sales
-                    </th>
-                  </tr>
-                </thead>
-                <tbody class="tbodySale"></tbody>
-              </table>
-            </div>
-
-            <div
-              class="bg-gray-50 rounded-lg w-full lg:w-1/2 p-4 shadow-md flex flex-col justify-center"
-            >
-              <h2 class="text-xl font-semibold mb-4">Estimated Revenue</h2>
-              <table class="w-full table-auto">
-                <thead>
-                  <tr class="border-gray-200">
-                    <th
-                      class="px-4 py-3 text-[1rem] font-medium text-start font-semibold"
-                    >
-                      Book Type
-                    </th>
-                    <th class="px-4 py-3 text-[1rem] font-medium font-semibold">
-                      Daily Revenue
-                    </th>
-                    <th class="px-4 py-3 text-[1rem] font-medium font-semibold">
-                      Monthly Revenue
-                    </th>
-                  </tr>
-                </thead>
-                <tbody class="tbodyRev"></tbody>
-              </table>
-            </div>
+    <section class="w-full p-4 !py-0 hidden" id="resultBox">
+      <div class="flex flex-col lg:flex-row gap-5 justify-center items-stretch p-0 md:p-6 h-full">
+        <div class="bg-gray-50 flex flex-col justify-center rounded-lg w-full lg:w-1/2 p-4 shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Estimated Sales</h2>
+          <div class="overflow-x-auto">
+            <table class="w-full table-auto">
+              <thead>
+                <tr class="border-gray-200">
+                  <th class="px-4 py-3 text-[1rem] font-medium text-start font-semibold">Book Type</th>
+                  <th class="px-4 py-3 text-[1rem] font-medium font-semibold">Daily Sales</th>
+                  <th class="px-4 py-3 text-[1rem] font-medium font-semibold">Monthly Sales</th>
+                </tr>
+              </thead>
+              <tbody class="tbodySale"></tbody>
+            </table>
           </div>
-        </section>
+        </div>
+    
+        <div class="bg-gray-50 rounded-lg w-full lg:w-1/2 p-4 shadow-md flex flex-col justify-center">
+          <h2 class="text-xl font-semibold mb-4">Estimated Revenue</h2>
+          <div class="overflow-x-auto">
+            <table class="w-full table-auto">
+              <thead>
+                <tr class="border-gray-200">
+                  <th class="px-4 py-3 text-[1rem] font-medium text-start font-semibold">Book Type</th>
+                  <th class="px-4 py-3 text-[1rem] font-medium font-semibold">Daily Revenue</th>
+                  <th class="px-4 py-3 text-[1rem] font-medium font-semibold">Monthly Revenue</th>
+                </tr>
+              </thead>
+              <tbody class="tbodyRev"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+     </div>
       </div>
     </div>
     <div class="flex flex-col items-center justify-center w-full">
-      <div class="w-[90%] md:w-[80%] mt-2 mb-5">
+      <div class="w-[90%] md:w-[80%] mt-0 mb-5">
         <h2
           class="poppins my-4 text-[1.3rem] sm:text-[1.5rem] font-semibold text-[#FFC451]"
         >
@@ -403,21 +387,35 @@
 
       const getBookPrice = (doc) => {
         const type2 = doc.querySelector(".a-icon-kindle-unlimited");
+        console.log("type 2 is " + type2);
         if (type2) {
+          console.log("in tyoe 2");
           let bookPrice = doc.querySelector(".a-color-price").innerText;
           let priceToPay = doc.querySelector(".priceToPay .a-offscreen");
+          console.log("price to pay is " + priceToPay);
           if (priceToPay) {
             console.log(priceToPay);
             console.log(priceToPay.innerText);
             bookPrice = priceToPay.innerText.replace(",", ".").replace("€", "");
+            console.log("book price is if price to pay is" + bookPrice);
           } else {
-            bookPrice = 0;
+            const kindlePrice = doc.querySelector("#kindle-price");
+            if (kindlePrice) {
+              console.log(kindlePrice);
+              bookPrice = kindlePrice.innerText
+                .replace(",", ".")
+                .replace("€", "");
+            } else {
+              bookPrice = 0;
+              return bookPrice;
+            }
             return bookPrice;
           }
 
           // bookPrice = bookPrice.replace(",", ".").replace("€", "").trim();
           return bookPrice;
         }
+        console.log("in tyoe 1");
         let bookPrice = doc.querySelector(".a-color-price").innerText;
         bookPrice = bookPrice.replace(",", ".").replace("€", "").trim();
         return bookPrice;
@@ -661,5 +659,35 @@
   }
 
   // bookPrice = bookPrice.replace(",", ".").replace("€", "").trim();
+  return bookPrice;
+}; -->
+<!-- const getBookPrice = (doc) => {
+  const type2 = doc.querySelector("#kindle-price");
+  if (type2) {
+    console.log("in tyoe 2");
+    let bookPrice = doc.querySelector(".a-color-price").innerText;
+    let priceToPay = doc.querySelector(".priceToPay .a-offscreen");
+    let kindlePrice = doc.querySelector(
+      "#kindle-price"
+    );
+    if (kindlePrice) {
+      // console.log(priceToPay);
+      // console.log(priceToPay.innerText);
+      // bookPrice = priceToPay.innerText.replace(",", ".").replace("€", "");
+      console.log(kindlePrice);
+      bookPrice = kindlePrice.innerText
+        .replace(",", ".")
+        .replace("€", "");
+    } else {
+      bookPrice = 0;
+      return bookPrice;
+    }
+
+    // bookPrice = bookPrice.replace(",", ".").replace("€", "").trim();
+    return bookPrice;
+  }
+  console.log("in tyoe 1");
+  let bookPrice = doc.querySelector(".a-color-price").innerText;
+  bookPrice = bookPrice.replace(",", ".").replace("€", "").trim();
   return bookPrice;
 }; -->
