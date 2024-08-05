@@ -18,6 +18,9 @@
       rel="stylesheet"
     />
     <style>
+      select.decorated option:hover {
+        box-shadow: 0 0 10px 100px #ffc451 inset;
+      }
       .poppins {
         font-family: "Poppins", sans-serif;
       }
@@ -91,18 +94,28 @@
         <section class="w-full lg:w-[50%] p-4" id="searchBox">
           <div class="bg-white rounded-lg p-6 h-full shadow-md">
             <h2 class="text-xl font-semibold mb-4">Enter search query</h2>
-            <div class="relative">
+            <div class="relative flex items-center gap-2 p-4 bg-white">
               <input
                 type="text"
                 id="query_input"
-                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFC451]"
+                class="w-[70%] p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFC451]"
                 placeholder="Computer Programming"
+              />
+
+              <input
+                type="number"
+                name="numberOfBooks"
+                id="numberOfBookstoSearch"
+                class="w-[30%] p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFC451]"
+                placeholder="Top 5?"
+                min="1"
+                max="10"
               />
               <button
                 onclick="fetchTopTenPage()"
-                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                class="p-3 text-white bg-[#FFC451] rounded-lg hover:bg-[#e6b93f] focus:outline-none focus:ring-2 focus:ring-[#FFC451]"
               >
-                <i class="fas fa-search text-[#FFC451]"></i>
+                <i class="fas fa-search"></i>
               </button>
             </div>
             <p id="warn" class="text-red-500 text-sm mt-2"></p>
@@ -123,59 +136,7 @@
           </p>
         </section>
 
-        <section class="w-full p-4 hidden" id="resultBox">
-          <!-- <div
-            class="flex flex-col lg:flex-row gap-5 justify-center items-stretch p-6 h-full"
-          >
-            <div
-              class="bg-gray-50 flex flex-col justify-center rounded-lg w-full lg:w-1/2 p-4 shadow-md"
-            >
-              <h2 class="text-xl font-semibold mb-4">Estimated Sales</h2>
-              <table class="w-full table-auto">
-                <thead>
-                  <tr class="border-gray-200">
-                    <th
-                      class="px-4 py-3 text-[1rem] font-medium text-start font-semibold"
-                    >
-                      Book Type
-                    </th>
-                    <th class="px-4 py-3 text-[1rem] font-medium font-semibold">
-                      Daily Sales
-                    </th>
-                    <th class="px-4 py-3 text-[1rem] font-medium font-semibold">
-                      Monthly Sales
-                    </th>
-                  </tr>
-                </thead>
-                <tbody class="tbodySale"></tbody>
-              </table>
-            </div>
-
-            <div
-              class="bg-gray-50 rounded-lg w-full lg:w-1/2 p-4 shadow-md flex flex-col justify-center"
-            >
-              <h2 class="text-xl font-semibold mb-4">Estimated Revenue</h2>
-              <table class="w-full table-auto">
-                <thead>
-                  <tr class="border-gray-200">
-                    <th
-                      class="px-4 py-3 text-[1rem] font-medium text-start font-semibold"
-                    >
-                      Book Type
-                    </th>
-                    <th class="px-4 py-3 text-[1rem] font-medium font-semibold">
-                      Daily Revenue
-                    </th>
-                    <th class="px-4 py-3 text-[1rem] font-medium font-semibold">
-                      Monthly Revenue
-                    </th>
-                  </tr>
-                </thead>
-                <tbody class="tbodyRev"></tbody>
-              </table>
-            </div>
-          </div> -->
-        </section>
+        <section class="w-full p-4 hidden" id="resultBox"></section>
       </div>
     </div>
     <div class="flex flex-col items-center justify-center w-full">
@@ -256,6 +217,20 @@
     </div>
     <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
     <script>
+        const WARNING_TEXT = document.getElementById("warn");
+      let totalTargetIds = 5;
+      const reqestedTopCountNumber = document.getElementById(
+        "numberOfBookstoSearch"
+      );
+      reqestedTopCountNumber.addEventListener("change", function () {
+        if (reqestedTopCountNumber.value > 10) {
+          WARNING_TEXT.innerText = "Please enter a number between 1 and 10 for the top books.";
+          return;
+        } else{
+
+          totalTargetIds = reqestedTopCountNumber.value;
+        }
+      });
       document
         .getElementById("query_input")
         .addEventListener("keypress", function (e) {
@@ -264,7 +239,7 @@
           }
         });
 
-      const WARNING_TEXT = document.getElementById("warn");
+
       const query_input = document.getElementById("query_input");
       // const TBODY_REV = document.querySelector(".tbodyRev");
       // const TBODY_SALE = document.querySelector(".tbodySale");
@@ -313,7 +288,6 @@
         "Audio MP3 Digital",
         "Audio-CD",
       ];
-      const totalTargetIds = 10;
 
       // let bookCounter = 0;
       const toggleVisibility = (element, show) => {
@@ -417,7 +391,7 @@
         const pagesCount = doc.querySelector(
           "#rpi-attribute-book_details-fiona_pages .rpi-attribute-value"
         );
-        console.log(pagesCount);
+        // console.log(pagesCount);
         if (pagesCount) {
           return parseInt(pagesCount.textContent);
         } else {
@@ -622,8 +596,8 @@
             SbookType: bookType,
             SbookPrice: parseFloat(bookPrice),
           });
-          console.log(bookType);
-          console.log(bookPrice);
+          // console.log(bookType);
+          // console.log(bookPrice);
         }
 
         // console.log(sellingAmountPerDay);
@@ -678,6 +652,10 @@
         }
       };
       const fetchTopTenPage = async () => {
+        if (reqestedTopCountNumber.value > 10) {
+          WARNING_TEXT.innerText = "Please enter a number between 1 and 10 for the top books.";
+          return;
+        }
         bookPricesArray = [];
         bookTypesArray = [];
         RESULT_BOX.innerHTML = "";
@@ -693,7 +671,7 @@
         hideResultBox();
         hideSearchBox();
         showLoader();
-        CURRENT_PROCESS.textContent = "Fetching the top 10 books...";
+        CURRENT_PROCESS.textContent = `Fetching the top ${totalTargetIds} books...`;
         const targetPageURL = `https://makis.world/amazon/s?k=${query}&i=stripbooks`;
         let totalBookData = [];
         try {
@@ -767,10 +745,11 @@
         const bookIds = [];
         const bookList = doc.querySelectorAll(".s-result-item");
         let IDsCounter = 0;
+        // console.log(totalTargetIds);
         for (let book of bookList) {
           const bookId = book.getAttribute("data-asin");
           if (bookId) {
-            if (IDsCounter !== totalTargetIds) {
+            if (IDsCounter !== parseInt(totalTargetIds)) {
               bookIds.push(bookId);
               IDsCounter++;
             } else {
@@ -778,6 +757,7 @@
             }
           }
         }
+        // console.log(bookIds);
         return bookIds;
       };
 
@@ -856,26 +836,31 @@
         for (let i = 0; i < allBooksData.length; i++) {
           const book = allBooksData[i];
           if (book.bookType == "Paperback" || book.bookType == "Taschenbuch") {
-            numberofPages = book.bookPages;
+            numberofPages = book.bookPages + " pages";
             break;
           } else if (
             book.bookType == "Hardcover" ||
-            book.bookType == "Gebunden"
+            book.bookType == "Gebunden" ||
+            book.bookType == "Gebundenes Buch"
           ) {
-            numberofPages = book.bookPages;
+            numberofPages = book.bookPages+" pages";
+            break;
+          } else if (book.bookType == "kindle") {
+            numberofPages = book.bookPages  + " pages";
             break;
           } else {
-            numberofPages = "";
+            numberofPages = null;
           }
         }
 
-        console.log(allBooksData);
+        // console.log(allBooksData);
         let allBookLength = allBooksData.length;
         // console.log(allBookLength);
         RESULT_BOX.innerHTML += `
           <div class="flex flex-col gap-5 justify-center items-stretch p-6 h-full">
             <h2 class="text-2xl font-semibold mb-4 text-center">${allBooksData[0].bookName}</h2>
-            <p>${numberofPages} Pages</p>
+
+            <p>${numberofPages}</p>
             <div class="flex flex-col lg:flex-row gap-5">
               <div class="bg-gray-50 flex flex-col justify-center rounded-lg w-full lg:w-1/2 p-4 shadow-md">
                 <h2 class="text-xl font-semibold mb-4 text-center">Estimated Sales</h2>
