@@ -58,6 +58,9 @@
           left: 50%;
         }
       }
+      #CalculateDetails:hover {
+      color: #FFC451 !important;
+      }
     </style>
   </head>
   <body>
@@ -114,83 +117,84 @@
 
 
 
-<div class="container flex justify-center items-center md:p-6 !py-0 my-0  mx-auto p-2 lg:p-12 w-screen pt-0 mt-0">
-  <div class="flex w-full flex-col items-center justify-center -mx-4 mb-0">
-    <!-- ISBN Input and Book Image -->
+<div class=" flex justify-center items-center md:p-6 !py-0 my-0 p-2 lg:p-12 !p-0  pt-0 mt-0">
+  <div class="flex w-full flex-col items-center justify-center mb-0">
+    <!-- ISBN Eingabe und Buchbild -->
     <section class="w-full lg:w-[30%] p-4 pt-0" id="searchBox">
       <div class="bg-white rounded-lg p-6 h-full shadow-md">
-        <h2 class="text-xl font-semibold mb-4 ">Enter ISBN</h2>
+        <h2 class="text-xl font-semibold mb-4 ">Bitte ISBN eingeben:</h2>
         <input
           type="text"
           id="isbn_input"
           class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFC451]"
-          placeholder="Enter 10-digit ISBN number"
+          placeholder="10-stellige ISBN-Nummer eingeben"
           maxlength="10"
         />
         <p id="warn" class="text-red-500 text-sm mt-2"></p>
         <button
           onclick="calculateDetails()"
           id="CalculateDetails"
-          class="w-full mt-4 py-3 bg-[#FFC451] hover:bg-[#fff] text-white hover:text-[#FFC451] border-2 !border-[#FFC451] font-semibold rounded-lg transition duration-300 disabled:opacity-75"
+          class="w-full mt-4 py-3 bg-[#FFC451] hover:bg-[#000] text-white !hover:text-[#fff] border-2 !border-[#FFC451] font-semibold rounded-lg transition duration-300 disabled:opacity-75"
         >
-          Get Details
+          Details abrufen
         </button>
       </div>
     </section>
 
- <div class="w-full">
-  <section
-  class="w-full lg:w-[100%] p-6 !py-0 flex flex-col items-center justify-center hidden"
-  id="loaderBox"
->
-  <img
-    src="https://ghostwritery.de/wp-content/uploads/2024/08/Autoren-Tool-Konkurrenz-Analyse-load-icon.gif"
-    alt="Loading animation"
-    class="mb-4"
-  />
-  <p class="text-md text-[#e7a82e]" id="currentProcess">
-    Process has started...
-  </p>
-</section>
+    <div class="w-full">
+      <section
+        class="w-full lg:w-[100%] p-6 !py-0 flex flex-col items-center justify-center hidden"
+        id="loaderBox"
+      >
+        <img
+          src="https://ghostwritery.de/wp-content/uploads/2024/08/Autoren-Tool-Konkurrenz-Analyse-load-icon.gif"
+          alt="Lade Animation"
+          class="mb-4"
+        />
+        <p class="text-md text-[#e7a82e]" id="currentProcess">
+          Prozess wurde gestartet...
+        </p>
+      </section>
 
-<section class="w-full p-4 !py-0 hidden" id="resultBox">
-  <div class="flex flex-col lg:flex-row gap-5 justify-center items-stretch p-0 md:p-6 h-full">
-    <div class="bg-gray-50 flex flex-col justify-center rounded-lg w-full lg:w-1/2 p-4 shadow-md">
-      <h2 class="text-xl font-semibold mb-4">Estimated Sales</h2>
-      <div class="overflow-x-auto">
-        <table class="w-full table-auto">
-          <thead>
-            <tr class="border-gray-200">
-              <th class="px-4 py-3 text-[1rem] font-medium text-start font-semibold">Book Type</th>
-              <th class="px-4 py-3 text-[1rem] font-medium font-semibold">Daily Sales</th>
-              <th class="px-4 py-3 text-[1rem] font-medium font-semibold">Monthly Sales</th>
-            </tr>
-          </thead>
-          <tbody class="tbodySale"></tbody>
-        </table>
-      </div>
-    </div>
+      <section class="w-full p-4 !py-0 hidden" id="resultBox">
+        <div class="flex flex-col lg:flex-row gap-5 justify-center items-stretch p-0 md:p-6 h-full">
+          <div class="bg-gray-50 flex flex-col justify-center rounded-lg w-full lg:w-1/2 p-4 shadow-md">
+            <h2 class="text-xl font-semibold mb-4">Geschätzte Verkäufe</h2>
+            <div class="overflow-x-auto">
+              <table class="w-full table-auto !border-none !border-0">
+                <thead>
+                  <tr class="border-gray-200">
+                    <th class="px-4 py-3 text-[1rem] font-medium text-start font-semibold">Format</th>
+                    <th class="px-4 py-3 text-[1rem] font-medium font-semibold">Tägliche Verkäufe</th>
+                    <th class="px-4 py-3 text-[1rem] font-medium font-semibold">Monatliche Verkäufe</th>
+                  </tr>
+                </thead>
+                <tbody class="tbodySale"></tbody>
+              </table>
+            </div>
+          </div>
 
-    <div class="bg-gray-50 rounded-lg w-full lg:w-1/2 p-4 shadow-md flex flex-col justify-center">
-      <h2 class="text-xl font-semibold mb-4">Estimated Revenue</h2>
-      <div class="overflow-x-auto">
-        <table class="w-full table-auto">
-          <thead>
-            <tr class="border-gray-200">
-              <th class="px-4 py-3 text-[1rem] font-medium text-start font-semibold">Book Type</th>
-              <th class="px-4 py-3 text-[1rem] font-medium font-semibold">Daily Revenue</th>
-              <th class="px-4 py-3 text-[1rem] font-medium font-semibold">Monthly Revenue</th>
-            </tr>
-          </thead>
-          <tbody class="tbodyRev"></tbody>
-        </table>
-      </div>
+          <div class="bg-gray-50 rounded-lg w-full lg:w-1/2 p-4 shadow-md flex flex-col justify-center">
+            <h2 class="text-xl font-semibold mb-4">Geschätzter Umsatz</h2>
+            <div class="overflow-x-auto">
+              <table class="w-full table-auto !border-none !border-0">
+                <thead>
+                  <tr class="border-gray-200">
+                    <th class="px-4 py-3 text-[1rem] font-medium text-start font-semibold">Format</th>
+                    <th class="px-4 py-3 text-[1rem] font-medium font-semibold">Täglicher Umsatz</th>
+                    <th class="px-4 py-3 text-[1rem] font-medium font-semibold">Monatlicher Umsatz</th>
+                  </tr>
+                </thead>
+                <tbody class="tbodyRev"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
-  </div>
-</section>
- </div>
   </div>
 </div>
+
 <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
 <script>
   const CALCULATE_BUTTON = document.getElementById("CalculateDetails");
@@ -198,7 +202,6 @@
   const ISBN_INPUT = document.getElementById("isbn_input");
   const TBODY_REV = document.querySelector(".tbodyRev");
   const TBODY_SALE = document.querySelector(".tbodySale");
-  // const DUMMY_REVENUE = document.querySelectorAll(".dummyRevenue");
   const RESULT_DAILY = document.querySelector("#result-daily");
   const RESULT_MONTHLY = document.querySelector("#result-monthly");
   const RESULT_BOX = document.getElementById("resultBox");
@@ -206,9 +209,10 @@
   const SEARCH_BOX = document.getElementById("searchBox");
   const CURRENT_PROCESS = document.getElementById("currentProcess");
   let bookCounter = 0;
+  
   const toggleVisibility = (element, show) => {
     if (!element) {
-      console.error("Element not found");
+      console.error("Element nicht gefunden");
       return;
     }
     if (show) {
@@ -230,21 +234,15 @@
   const hideSearchBox = () => toggleVisibility(SEARCH_BOX, false);
 
   const enableButton = () => {
-    CALCULATE_BUTTON.textContent = "Get Details";
+    CALCULATE_BUTTON.textContent = "Details abrufen";
     CALCULATE_BUTTON.disabled = false;
-    CALCULATE_BUTTON.classList.add(
-      "hover:bg-[#fff]",
-      "hover:text-[#FFC451]"
-    );
+    CALCULATE_BUTTON.classList.add("hover:bg-[#fff]", "hover:text-[#FFC451]");
   };
 
   const disableButton = () => {
     CALCULATE_BUTTON.disabled = true;
-    CALCULATE_BUTTON.textContent = "Calculating...";
-    CALCULATE_BUTTON.classList.remove(
-      "hover:bg-[#fff]",
-      "hover:text-[#FFC451]"
-    );
+    CALCULATE_BUTTON.textContent = "Berechnung läuft...";
+    CALCULATE_BUTTON.classList.remove("hover:bg-[#fff]", "hover:text-[#FFC451]");
   };
 
   const calculateSellingAmountPerDay = (sellerRank) => {
@@ -301,14 +299,12 @@
       sellingAmountPerDay = Math.round(
         ((1 - 1) / 50000) * (sellerRank - 50000) + 1
       );
-    else if (sellerRank > 100000) sellingAmountPerDay = "No Sales";
+    else if (sellerRank > 100000) sellingAmountPerDay = "Keine Verkäufe";
     return sellingAmountPerDay;
   };
 
   const getAllBookIds = (doc) => {
-    const typesButtons = doc.querySelectorAll(
-      ".a-button-toggle .a-button-inner a"
-    );
+    const typesButtons = doc.querySelectorAll(".a-button-toggle .a-button-inner a");
     const bookIds = [];
     typesButtons.forEach((button) => {
       const href = button.getAttribute("href");
@@ -326,7 +322,6 @@
     let selectedType2 = doc.querySelector(
       ".a-button-selected .a-button-inner .a-button-text .slot-title .audible_mm_title span span:nth-of-type(2)"
     );
-    // console.log(selectedType2);
     if (selectedType2) {
       let bookType = selectedType2.textContent.trim();
       return bookType;
@@ -340,39 +335,36 @@
 
   const getBookPrice = (doc) => {
     const type2 = doc.querySelector(".a-icon-kindle-unlimited");
-    console.log("type 2 is " + type2);
+    // console.log("type 2 is " + type2);
     if (type2) {
-      console.log("in tyoe 2");
+      // console.log("in tyoe 2");
       let bookPrice = doc.querySelector(".a-color-price").innerText;
       let priceToPay = doc.querySelector(".priceToPay .a-offscreen");
-      console.log("price to pay is " + priceToPay);
+      // console.log("price to pay is " + priceToPay);
       if (priceToPay) {
-        console.log(priceToPay);
-        console.log(priceToPay.innerText);
+        // console.log(priceToPay);
+        // console.log(priceToPay.innerText);
         bookPrice = priceToPay.innerText.replace(",", ".").replace("€", "");
-        console.log("book price is if price to pay is" + bookPrice);
+        // console.log("book price is if price to pay is" + bookPrice);
       } else {
         const kindlePrice = doc.querySelector("#kindle-price");
         if (kindlePrice) {
-          console.log(kindlePrice);
-          bookPrice = kindlePrice.innerText
-            .replace(",", ".")
-            .replace("€", "");
+          // console.log(kindlePrice);
+          bookPrice = kindlePrice.innerText.replace(",", ".").replace("€", "");
         } else {
           bookPrice = 0;
           return bookPrice;
         }
         return bookPrice;
       }
-
-      // bookPrice = bookPrice.replace(",", ".").replace("€", "").trim();
       return bookPrice;
     }
-    console.log("in tyoe 1");
+    // console.log("in tyoe 1");
     let bookPrice = doc.querySelector(".a-color-price").innerText;
     bookPrice = bookPrice.replace(",", ".").replace("€", "").trim();
     return bookPrice;
   };
+
   const getSellerLevel = (targetPageCode) => {
     let rankMatch = targetPageCode.match(
       /Amazon Bestseller-Rang: <\/span> Nr\. ([\d.,]+) /
@@ -391,20 +383,19 @@
 
     return null;
   };
+
   const fetchPage = async (url) => {
     try {
       const response = await axios.get(url);
-      if (response.status !== 200)
-        throw new Error("Network response was not ok.");
+      if (response.status !== 200) throw new Error("Netzwerkantwort war nicht in Ordnung.");
       return response.data;
     } catch (error) {
       enableButton();
       hideLoader();
 
       showSearchBox();
-      console.error("Error fetching the page:", error);
-      WARNING_TEXT.textContent =
-        "An error occurred while fetching the page.";
+      console.error("Fehler beim Abrufen der Seite:", error);
+      WARNING_TEXT.textContent = "Beim Abrufen der Seite ist ein Fehler aufgetreten.";
     }
   };
 
@@ -412,8 +403,8 @@
     bookCounter++;
     CURRENT_PROCESS.textContent = "";
     const url = `https://makis.world/amazon/dp/${bookId}`;
-    CURRENT_PROCESS.innerHTML = `Fetching book details for book type <b>${bookCounter}</b>`;
-    console.log("Fetching book details for book ID:", bookId);
+    CURRENT_PROCESS.innerHTML = `Details für Format <b>${bookCounter}</b> abrufen`;
+    // console.log("Details für Buch-ID abrufen:", bookId);
     const targetPageCode = await fetchPage(url);
     if (!targetPageCode) return null;
 
@@ -425,27 +416,26 @@
       return;
     }
     let bookPrice = getBookPrice(doc);
-    bookPrice = parseFloat(bookPrice); // Convert bookPrice to a number
+    bookPrice = parseFloat(bookPrice);
     const sellerLevel = getSellerLevel(targetPageCode);
     const sellingAmountPerDay = calculateSellingAmountPerDay(sellerLevel);
     let sellingAmountPerMonth = 0;
-    if (sellingAmountPerDay !== "No Sales") {
+    if (sellingAmountPerDay !== "Keine Verkäufe") {
       sellingAmountPerMonth = sellingAmountPerDay * 30;
     } else {
-      sellingAmountPerMonth = "No Sales";
+      sellingAmountPerMonth = "Keine Verkäufe";
     }
     let dailyRevenue = 0;
     let monthlyRevenue = 0;
     if (
       !isNaN(bookPrice) &&
-      sellingAmountPerDay !== "No Sales" &&
+      sellingAmountPerDay !== "Keine Verkäufe" &&
       !isNaN(sellingAmountPerMonth)
     ) {
       dailyRevenue = Math.round(bookPrice * sellingAmountPerDay);
       monthlyRevenue = Math.round(bookPrice * sellingAmountPerMonth);
     }
-    CURRENT_PROCESS.textContent =
-      "Counting the number of book types available...";
+    CURRENT_PROCESS.textContent = "Anzahl der verfügbaren Buchformate zählen...";
     return {
       bookId,
       bookType,
@@ -465,8 +455,7 @@
     WARNING_TEXT.textContent = "";
     const isbn = ISBN_INPUT.value.trim();
     if (isbn.length !== 10) {
-      WARNING_TEXT.textContent = "ISBN must be 10 digits.";
-
+      WARNING_TEXT.textContent = "ISBN muss 10-stellig sein.";
       return;
     }
     disableButton();
@@ -477,11 +466,11 @@
     const firstBookDetails = await fetchBookDetails(isbn);
     if (!firstBookDetails) {
       WARNING_TEXT.textContent =
-        "Failed to fetch details. Please check the ISBN and try again.";
+        "Abrufen der Details fehlgeschlagen. Bitte ISBN überprüfen und erneut versuchen.";
       enableButton();
       return;
     }
-    console.log(firstBookDetails);
+    // console.log(firstBookDetails);
     const url = `https://makis.world/amazon/dp/${isbn}`;
     const targetPageCode = await fetchPage(url);
     const parser = new DOMParser();
@@ -495,7 +484,7 @@
     let totalMonthlyRevenue = 0;
     let remainingBookDetailsLength = remainingBookIds.length;
     if (
-      firstBookDetails.sellingAmountPerDay !== "No Sales" &&
+      firstBookDetails.sellingAmountPerDay !== "Keine Verkäufe" &&
       !isNaN(firstBookDetails.sellingAmountPerMonth)
     ) {
       totalDailySales += firstBookDetails.sellingAmountPerDay;
@@ -505,14 +494,12 @@
     }
     while (remainingBookDetailsLength > 0) {
       remainingBookDetailsLength--;
-      const bookDetails = await fetchBookDetails(
-        remainingBookIds[remainingBookDetailsLength]
-      );
-      console.log(bookDetails);
+      const bookDetails = await fetchBookDetails(remainingBookIds[remainingBookDetailsLength]);
+      // console.log(bookDetails);
       if (bookDetails) {
         remainingBookDetails.push(bookDetails);
         if (
-          bookDetails.sellingAmountPerDay !== "No Sales" &&
+          bookDetails.sellingAmountPerDay !== "Keine Verkäufe" &&
           !isNaN(bookDetails.sellingAmountPerMonth)
         ) {
           totalDailySales += bookDetails.sellingAmountPerDay;
@@ -524,76 +511,66 @@
     }
 
     const allBooksData = [firstBookDetails, ...remainingBookDetails];
-    console.log(allBooksData);
+    // console.log(allBooksData);
     let allBookLength = allBooksData.length;
     while (allBookLength > 0) {
-      allBookLength--; // Decrement before accessing the array elements
-      let rowSale = `
+  allBookLength--; // Decrement before accessing the array elements
+  let rowSale = `
     <tr class="border-gray-200">
       <td class="px-4 py-3 text-[1rem] font-medium">${allBooksData[allBookLength].bookType}</td>
-
       <td class="px-4 py-3 text-[1rem] text-center">
-        <span class="revenue-kindle-monthly">${allBooksData[allBookLength].sellingAmountPerDay}</span>
+        <span class="revenue-kindle-monthly">${allBooksData[allBookLength].sellingAmountPerDay.toLocaleString('de-DE')}</span>
       </td>
       <td class="px-4 py-3 text-[1rem] text-center">
-        <span class="revenue-kindle-monthly">${allBooksData[allBookLength].sellingAmountPerMonth}</span>
+        <span class="revenue-kindle-monthly">${allBooksData[allBookLength].sellingAmountPerMonth.toLocaleString('de-DE')}</span>
       </td>
     </tr>
-
   `;
-      TBODY_SALE.innerHTML += rowSale;
-      let rowRev = `
+  TBODY_SALE.innerHTML += rowSale;
+
+  let rowRev = `
     <tr class="border-gray-200">
       <td class="px-4 py-3 text-[1rem] font-medium">${allBooksData[allBookLength].bookType}</td>
-
       <td class="px-4 py-3 text-[1rem] text-center">
-        <span class="revenue-kindle-monthly">${allBooksData[allBookLength].dailyRevenue}</span>€
+        <span class="revenue-kindle-monthly">${allBooksData[allBookLength].dailyRevenue.toLocaleString('de-DE')}</span>€
       </td>
       <td class="px-4 py-3 text-[1rem] text-center">
-        <span class="revenue-kindle-monthly">${allBooksData[allBookLength].monthlyRevenue}</span>€
-      </td>
-
-  `;
-      TBODY_REV.innerHTML += rowRev;
-    }
-    TBODY_SALE.innerHTML += `
-    </tr>
-           <tr class="border-gray-200">
-      <td class="px-4 py-3 text-[1rem] font-semibold">Total</td>
-
-      <td class="px-4 py-3 text-[1rem] text-center">
-        <span class="revenue-kindle-monthly font-semibold">${totalDailySales}</span>
-      </td>
-      <td class="px-4 py-3 text-[1rem] text-center">
-        <span class="revenue-kindle-monthly font-semibold">${totalMonthlySales}</span>
+        <span class="revenue-kindle-monthly">${allBooksData[allBookLength].monthlyRevenue.toLocaleString('de-DE')}</span>€
       </td>
     </tr>
   `;
-    TBODY_REV.innerHTML += `
-    </tr>
-           <tr class="border-gray-200">
-      <td class="px-4 py-3 text-[1rem] font-semibold">Total</td>
+  TBODY_REV.innerHTML += rowRev;
+}
 
-      <td class="px-4 py-3 text-[1rem] text-center">
-        <span class="revenue-kindle-monthly font-semibold">${totalDailyRevenue}</span>€
-      </td>
-      <td class="px-4 py-3 text-[1rem] text-center">
-        <span class="revenue-kindle-monthly font-semibold">${totalMonthlyRevenue}</span>€
-      </td>
-    </tr>
-  `;
+TBODY_SALE.innerHTML += `
+  <tr class="border-gray-200">
+    <td class="px-4 py-3 text-[1rem] font-semibold">Total</td>
+    <td class="px-4 py-3 text-[1rem] text-center">
+      <span class="revenue-kindle-monthly font-semibold">${totalDailySales.toLocaleString('de-DE')}</span>
+    </td>
+    <td class="px-4 py-3 text-[1rem] text-center">
+      <span class="revenue-kindle-monthly font-semibold">${totalMonthlySales.toLocaleString('de-DE')}</span>
+    </td>
+  </tr>
+`;
 
-    // console.log("Total Daily Sales:", totalDailySales);
-    // console.log("Total Monthly Sales:", totalMonthlySales);
-    // console.log("Total Daily Revenue:", totalDailyRevenue);
-    // console.log("Total Monthly Revenue:", totalMonthlyRevenue);
-
+TBODY_REV.innerHTML += `
+  <tr class="border-gray-200">
+    <td class="px-4 py-3 text-[1rem] font-semibold">Gesamt</td>
+    <td class="px-4 py-3 text-[1rem] text-center">
+      <span class="revenue-kindle-monthly font-semibold">${totalDailyRevenue.toLocaleString('de-DE')}</span>€
+    </td>
+    <td class="px-4 py-3 text-[1rem] text-center">
+      <span class="revenue-kindle-monthly font-semibold">${totalMonthlyRevenue.toLocaleString('de-DE')}</span>€
+    </td>
+  </tr>
+`;
     enableButton();
     hideLoader();
     showResultBox();
     showSearchBox();
-    CURRENT_PROCESS.textContent = "Process has started...";
-  };
+    CURRENT_PROCESS.textContent = "Prozess wurde gestartet...";
+  };
 </script>
 
 
